@@ -5,15 +5,21 @@
 
 namespace IMD {
 	//Возвращает факториал числа
-	inline constexpr int factorial(const int value) {
-		if (value < 0) throw std::invalid_argument("value < 0");
+	inline constexpr size_t factorial(const size_t value) {
 		if (value == 0 || value == 1) return 1;
 		return value * factorial(value - 1);
 	}
 	//Возвращает треугольник Паскаля
 	std::vector<std::vector<int>> pascal_triangle(size_t row);
 	//Возвращает значение биномиального коэффициента C(n, k)
-	int binomial_coefficient(int k, int n);
+	int binomial_coefficient(size_t k, size_t n);
+	//Возвращает n-ое число Фибоначчи
+	size_t fibonacci_number(size_t n);
+	//Возвращает n-ое число Люка
+	size_t luke_number(size_t n);
+	//Возвращает n-ое число Каталана
+	size_t catalan_number(size_t n);
+
 }
 
 

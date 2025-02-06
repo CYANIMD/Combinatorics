@@ -2,7 +2,7 @@
 #include "combinatorics.h"
 
 int main() {
-	std::cout << IMD::binomial_coefficient(6, 10);
-
+	for (size_t i{ 0 }; i < 10; ++i)
+		std::cout << IMD::catalan_number(i) << std::endl;
 
 }
