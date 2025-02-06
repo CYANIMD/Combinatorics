@@ -2,7 +2,14 @@
 #include "combinatorics.h"
 
 int main() {
-	for (size_t i{ 0 }; i < 10; ++i)
-		std::cout << IMD::catalan_number(i) << std::endl;
+	std::vector<int> v{ 1, 3, 5 };
+	v = IMD::next_permutation(v);
+	v = IMD::next_permutation(v);
+	v = IMD::next_permutation(v);
+	v = IMD::next_permutation(v);
+	v = IMD::next_permutation(v);
+	v = IMD::next_permutation(v);
+	for (auto x : v)
+		std::cout << x << " ";
 
 }

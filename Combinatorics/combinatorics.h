@@ -2,6 +2,7 @@
 #define __Combinatorics_
 
 #include <vector>
+#include <ranges>
 
 namespace IMD {
 	//Возвращает факториал числа
@@ -19,7 +20,24 @@ namespace IMD {
 	size_t luke_number(size_t n);
 	//Возвращает n-ое число Каталана
 	size_t catalan_number(size_t n);
-
+	template<typename T> requires requires(T a, T b) { { a < b }; }
+	std::vector<T> next_permutation(const std::vector<T>& source) {
+		//Алгоритм Нарайаны
+		std::vector<T> result{ source };
+		size_t j{};
+		size_t l{};
+		for (size_t i{ 0 }; i < result.size() - 1; ++i) {
+			if (result[i] < result[i + 1]) j = i;
+			if (result[i] > result[j]) l = i;
+		}
+		if (result[result.size() - 1] > result[j]) l = result.size() - 1;
+		if (j == l) std::reverse(std::begin(result), std::end(result));
+		else {
+			std::swap(result[j], result[l]);
+			std::reverse(std::begin(result) + j + 1, std::end(result));
+		}
+		return result;
+	}
 }
 
 
