@@ -51,5 +51,33 @@ namespace IMD {
 		}
 		return first;
 	}
-	
+	/*
+	In the "100 game" two players take turns adding, to a running total, any integer from 1 to 10.
+	The player who first causes the running total to reach or exceed 100 wins.
+	What if we change the game so that players cannot re-use integers?
+	For example, two players might take turns drawing from a common pool of numbers from 1 to 15 without replacement until they reach a total >= 100.
+	Given two integers maxChoosableInteger and desiredTotal, return true if the first player to move can force a win, otherwise, return false.
+	Assume both players play optimally.
+	*/
+	bool canIWin(int maxChoosableInteger, int desiredTotal) {
+		std::map<int, bool> ways{}; //Словарь всех возможных ходов
+		bool Flag{ true };
+	}
+	/*
+	You are given an integer array height of length n. There are n vertical lines drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i]).
+	Find two lines that together with the x-axis form a container, such that the container contains the most water.
+	Return the maximum amount of water a container can store.
+	Notice that you may not slant the container.
+	*/
+	int maxArea(const std::vector<int>& height) {
+		int left{ 0 };
+		int right(height.size() - 1);
+		int S{ 0 }; //"Объём" хранимой воды: S(right, left) = (right - left) * min{height[right], height[left]}
+		while (left < right) {
+			S = std::max(S, (right - left) * std::min(height[right], height[left]));
+			if (height[left] < height[right]) left++;
+			else right--;
+		}
+		return S;
+	}
 }
