@@ -4,9 +4,17 @@
 #include <vector>
 #include <ranges>
 #include <algorithm>
+#include <concepts>
 #include <map>
 
 namespace IMD {
+	template<typename T>
+	concept Floating = std::is_floating_point_v<T>;
+	template<typename T>
+	concept Intergral = std::is_integral_v<T>;
+	template<typename T>
+	concept Numeric = Floating<T> || Intergral<T>;
+
 	//Возвращает факториал числа
 	inline constexpr size_t factorial(const size_t value) {
 		if (value == 0 || value == 1) return 1;
@@ -41,20 +49,59 @@ namespace IMD {
 		}
 		return result;
 	}
-	//Возвращает все подмножества исходного множества
+	//Возвращает все перестановки исходного массива
 	template<typename T>
-	std::vector<std::vector<T>> subsets(const std::vector<T>& source) {
-		std::vector<std::vector<T>> result{ std::vector<T> {} };
-		for (size_t i{ 0 }; i < source.size(); ++i) {
-			size_t l = result.size();
-			for (size_t j{ 0 }; j < l; ++j) {
-				auto current_subset = result[j];
-				current_subset.push_back(source[i]);
-				result.push_back(current_subset);
-			}
+	std::vector<std::vector<T>> permutations(const std::vector<T>& source) {
+		std::vector<std::vector<T>> result{source};
+		std::vector<T> permutation{ next_permutation(source) };
+		while (permutation != source) {
+			result.push_back(permutation);
+			permutation = { next_permutation(permutation) };
 		}
 		return result;
 	}
+	//Возвращает все уникальные перестановки исходного массива
+	template<typename T>
+	std::vector<std::vector<T>> unique_permutations(const std::vector<T>& source) {
+		std::vector<std::vector<T>> result{ source };
+		std::vector<T> permutation{ next_permutation(source) };
+		while (permutation != source) {
+			result.push_back(permutation);
+			permutation = { next_permutation(permutation) };
+		}
+		return result;
+	}
+	//Вспомогательный метод к unique_subsets()
+	template<typename T>
+	void subsetsWithDupHelp(std::vector<T>& nums, std::vector<T>& path, size_t start, std::vector<std::vector<T>>& result) {
+		result.push_back(path);
+		for (size_t i{ start }; i < nums.size(); ++i) {
+			if (i > start && nums[i] == nums[i - 1]) continue; //Пропуск повторяющихся элементов
+			path.push_back(nums[i]);
+			subsetsWithDupHelp(nums, path, i + 1, result);
+			path.pop_back();
+		}
+	}
+	//Возвращает все неповторяющиеся подмножества исходного массива
+	template<typename T>
+	std::vector<std::vector<T>> unique_subsets(const std::vector<T>& source) {
+		std::vector<std::vector<T>> result{ std::vector<T> {} };
+		std::vector<T> copy_source{ source };
+		std::sort(std::begin(copy_source), std::end(copy_source));
+		std::vector<T> path{};
+		subsetsWithDupHelp(copy_source, path, 0, result);
+		return result;
+	}
+	template<Numeric T>
+	T minimumTotal(std::vector<std::vector<T>>& triangle) {
+		std::vector<T> temp{ triangle.back() };
+		for (int i = triangle.size() - 2; i >= 0; --i) {
+			for (int j{ 0 }; j <= i; ++j)
+				temp[j] = triangle[i][j] + std::min(temp[j], temp[j + 1]);
+		}
+		return temp[0];
+	}
+
 	/*
 	In the "100 game" two players take turns adding, to a running total, any integer from 1 to 10.
 	The player who first causes the running total to reach or exceed 100 wins.
